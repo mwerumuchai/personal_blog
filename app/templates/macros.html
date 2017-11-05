@@ -4,6 +4,17 @@
 {% macro displayBlogs(blog_list)%} {% for blog in blog_list%}
 <div class="container">
   <a href="/blog/{{blog.id}}">{{blog.title }}</a>
+  <small>By: <i>{{ blog.user.username }}</i></small>
+
+</div>
+{% endfor %}{% endmacro %}
+
+<!-- Display comments -->
+<!-- Display all the blogs -->
+{% macro displayComments(comment_list)%} {% for comment in comment_list%}
+<div class="container">
+  <a href="/blog/comment/new{{comment.id}}">{{ comment.comment_section }}</a>
+  <small>By: <i>{{ comment.user.username }}</i></small>
 
 </div>
 {% endfor %}{% endmacro %}

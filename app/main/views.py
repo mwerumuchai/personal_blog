@@ -3,7 +3,7 @@ from . import main
 from .. import db
 from ..models import Blog,User,Comments,Role
 from flask_login import login_required, current_user
-from .forms import BlogForm
+from .forms import BlogForm, CommentForm
 
 # views
 @main.route('/')
@@ -28,8 +28,9 @@ def blogs(id):
     if blogs is None:
         abort(404)
 
+    comment_id = Comments.get_comments(id)
     title = f'Blog {blog.id}'
-    return render_template('blog.html', title = title, blog = blog, comment = comment)
+    return render_template('blog.html', title = title, blog = blog, comment_id = comment_id)
 
 # comment on blogs
 @main.route('/blog/comment/new<int:id>', methods = ['GET','POST'])
@@ -50,7 +51,7 @@ def new_comment(id):
         new_comment = Comments(comment_section=comment_section, blog=blog, user=current_user)
         new_comment.save_comment()
 
-        return redirect(url_for('.blog', id=blog_id))
+        # return redirect(url_for('.blog', id = blog.id))
 
     title = 'New Comment'
     return render_template('new_comment.html', title=title, comment_form=form)
