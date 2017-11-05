@@ -1,5 +1,6 @@
 from app import create_app,db
 from flask_script import Manager,Server
+from app.models import Blog,User,Comments,Role
 from  flask_migrate import Migrate, MigrateCommand
 from flask_login import LoginManager
 
@@ -18,7 +19,7 @@ manager.add_command('db',MigrateCommand)
 
 @manager.shell
 def make_shell_context():
-    return dict(app = app, db = db)
+    return dict(app = app, db = db,Blog = Blog, User = User, Comments = Comments, Role = Role)
 
 
 if __name__ == '__main__':
