@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% import 'macros.html' as macro %} {% block style %}{{ super() }}
+{% extends 'bootstrap/base.html' %} {% extends 'base.html' %} {% import 'macros.html' as macro %} {% block style %}{{ super() }}
 <link rel="stylesheet" href="{{url_for('static',filename='css/index.css')}}"> {% endblock %}
 <!-- block content -->
 {% block content %}
