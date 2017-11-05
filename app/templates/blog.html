@@ -1,0 +1,5 @@
+{% extends 'base.html' %} {% import 'macros.html' as macro %} {% block style %}{{ super() }}
+<link rel="stylesheet" href="{{url_for('static',filename='css/index.css')}}"> {% endblock %}
+<!-- block content -->
+{% block content %}
+<h4>Brownie's Blog</h4> {{ blog.title }} {% endblock %}
