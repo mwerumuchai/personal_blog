@@ -1,0 +1,7 @@
+<!-- Display all the blogs -->
+{% macro displayBlogs(blog_list)%} {% for blog in blog_list%}
+<div class="container">
+  <a href="/blog/{{blog.id}}">{{blog.title }}</a>
+
+</div>
+{% endfor %}{% endmacro %}
