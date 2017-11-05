@@ -37,7 +37,7 @@ class Blog(db.Model):
         '''
         Function that returns all the data from blog after being queried
         '''
-        blog = Blog.query.order_by(blog_id.desc()).all()
+        blog = Blog.query.order_by(Blog.id.desc()).all()
         return blog
 
     @classmethod
