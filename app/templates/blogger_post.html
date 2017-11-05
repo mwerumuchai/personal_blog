@@ -2,7 +2,8 @@
 <link rel="stylesheet" href="{{url_for('static', filename='css/index.css')}}">{%endblock%}
 <!-- content block -->
 {% block content %}
-<div class="col-md-4">
-  {{wtf.quick_form(blog_form)}} {{simplemde.load}}
+<div class="col-md4">
+  {{format_review|safe}}
 </div>
+
 {% endblock %}

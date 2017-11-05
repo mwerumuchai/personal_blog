@@ -5,8 +5,8 @@
 <h4>Brownie's Blog</h4> {{ blog.title }}
 <div class="container">
   {{ blog.content }}
-  <h4>Comments:</h4>{% if comment %} {{ macro.displayComments(comment)}}
+  <h4>Comments:</h4>{% if comment %} {{ macro.displaySpecificBlog(comment)}}
   <hr> {%else%}
   <h3 class="text-center">No comment </h3>{% endif %}
-  <p class="text-right"><a class="btn btn-primary" href="/blog/comment/new{{blog.id}}">Add a comment</a></p>
+  <p class="text-right"><a class="btn btn-primary" href="/blog/new/{{blog.id}}">Add a comment</a></p>
 </div>{% endblock %}

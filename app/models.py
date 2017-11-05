@@ -6,6 +6,11 @@ from datetime import datetime
 
 @login_manager.user_loader
 def load_user(user_id):
+    '''
+    Given *user_id*, return the associated User object.
+
+    :param unicode user_id: user_id (email) user to retrieve
+    '''
     return User.query.get(int(user_id))
 
 # collection of all blogs

@@ -4,6 +4,7 @@ from .. import db
 from ..models import Blog,User,Comments,Role
 from flask_login import login_required, current_user
 from .forms import BlogForm, CommentForm
+import markdown2
 
 # views
 @main.route('/')
@@ -32,8 +33,22 @@ def blogs(id):
     title = f'Blog {blog.id}'
     return render_template('blog.html', title = title, blog = blog, comment_id = comment_id)
 
+# single blog
+@main.route('/blog/<int:id>')
+def single_blog(id):
+    '''
+    Function that handles viewing a single review
+    '''
+    blog=Blog.query.get(id)
+
+    if blogs is None:
+        abort(404)
+
+    format_blog = markdown2.markdown(blog.content,extras=["code-friendly", "fenced-code-blocks"])
+
+    return render_template('blogger_post.html', title = title, blog = blog, content = content, format_blog = format_blog)
 # comment on blogs
-@main.route('/blog/comment/new<int:id>', methods = ['GET','POST'])
+@main.route('/blog/new/<int:id>', methods = ['GET','POST'])
 @login_required
 def new_comment(id):
     '''
@@ -48,10 +63,10 @@ def new_comment(id):
 
     if form.validate_on_submit():
         comment_section = form.comment_section.data
-        new_comment = Comments(comment_section=comment_section, blog=blog, user=current_user)
+        new_comment = Comments(comment_section=comment_section, blog_id=blog.id, user=current_user)
         new_comment.save_comment()
 
-        # return redirect(url_for('.blog', id = blog.id))
+        return redirect(url_for('.blogs', id = blog.id))
 
     title = 'New Comment'
     return render_template('new_comment.html', title=title, comment_form=form)
