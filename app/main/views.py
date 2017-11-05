@@ -17,6 +17,7 @@ def index():
     return render_template('index.html', title = title, blog = blog)
 
 @main.route('/blog/<int:id>')
+@login_required
 def blogs(id):
     '''
     Blog route function that returns a list of blogs
@@ -31,6 +32,7 @@ def blogs(id):
     return render_template('blog.html', title = title, blog = blog)
 
 @main.route('/blog/new/', methods = ['GET','POST'])
+@login_required
 def new_blog():
     '''
     New Blog function that returns new blog post

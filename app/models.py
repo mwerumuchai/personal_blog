@@ -37,8 +37,16 @@ class Blog(db.Model):
         '''
         Function that returns all the data from blog after being queried
         '''
-        blog = Blog.query.all()
+        blog = Blog.query.order_by(blog_id.desc()).all()
         return blog
+
+    @classmethod
+    def delete_blog(cls):
+        '''
+        Functions the deletes a blog post
+        '''
+        blog = Blog.query.filter_by(id=blog_id).delete()
+        comment = Comments.query.filter_by(blog_id=blog_id).delete()
 
 # users
 class User(UserMixin,db.Model):
@@ -68,6 +76,10 @@ class User(UserMixin,db.Model):
 
     def verify_password(self,password):
         return check_password_hash(self.pass_secure,password)
+
+    def save_user(self):
+        db.session.add(self)
+        db.session.commit()
 
 
 
@@ -101,8 +113,20 @@ class Comments(db.Model):
         comment = Comments.query.order_by(Comments.date_posted.desc()).filter_by(comment_id=id).all()
         return comment
 
+    @classmethod
+    def delete_comment(cls,comment_id):
+        '''
+        Function that delete a simgle comment in a blog post
+        '''
+        comment = Comments.query.filter_by(id=comment_id).delete()
+        db.session.commit()
+
+
 #levels of access
 class Role(db.Model):
+    '''
+    ROle class defines a user's roles
+    '''
     __tablename__ = 'roles'
 
     id = db.Column(db.Integer,primary_key = True)
