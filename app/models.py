@@ -19,7 +19,9 @@ class Blog(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     title = db.Column(db.String(255))
     content = db.Column(db.String(255))
-    date_posted = db.Column(db.DateTime,default=datetime.now)
+    date_posted = db.Column(db.DateTime,default=datetime.utcnow)
+    user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
+    comment_id = db.relationship("Comments", backref = "blog", lazy = "dynamic")
 
     # save
     def save_blog(self):
@@ -49,8 +51,11 @@ class User(UserMixin,db.Model):
     id = db.Column(db.Integer,primary_key = True)
     username = db.Column(db.String(255))
     email = db.Column(db.String(255),unique=True,index=True)
-    password_hash = db.Column(db.String(255))
     pass_secure = db.Column(db.String(255))
+    role_id = db.Column(db.Integer,db.ForeignKey("roles.id"))
+    blog = db.relationship("Blog", backref = "user", lazy = "dynamic")
+    comment = db.relationship("Comments", backref = "user", lazy = "dynamic")
+
 
     # securing our passwords
     @property
@@ -68,3 +73,41 @@ class User(UserMixin,db.Model):
 
     def __repr__(self):
         return f'User {self.username}'
+
+# comments
+class Comments(db.Model):
+    '''
+    comment class that creates new comments from users
+    '''
+    __tablename__ = 'comment'
+
+    # add columns
+    id = db.Column(db. Integer,primary_key = True)
+    comment_section = db.Column(db.String(255))
+    author = db.Column(db.String(255))
+    date_posted = db.Column(db.DateTime,default=datetime.utcnow)
+    user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
+    blog_id = db.Column(db.Integer,db.ForeignKey("blog.id"))
+
+    def save_comment(self):
+        '''
+        save the comments per blog
+        '''
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def get_comments(self,id):
+        comment = Comments.query.order_by(Comments.date_posted.desc()).filter_by(comment_id=id).all()
+        return comment
+
+#levels of access
+class Role(db.Model):
+    __tablename__ = 'roles'
+
+    id = db.Column(db.Integer,primary_key = True)
+    name = db.Column(db.String(255))
+    users = db.relationship('User',backref = 'role', lazy ='dynamic')
+
+    def __repr__(self):
+        return f'User {self.name}'
