@@ -28,8 +28,45 @@ def blogs(id):
     if blogs is None:
         abort(404)
 
-    title = 'Brownies Blog'
-    return render_template('blog.html', title = title, blog = blog)
+    title = f'Blog {blog.id}'
+    return render_template('blog.html', title = title, blog = blog, comment = comment)
+
+# comment on blogs
+@main.route('/blog/comment/new<int:id>', methods = ['GET','POST'])
+@login_required
+def new_comment(id):
+    '''
+    New comment function that returns a form to create a comment on a new page
+    '''
+    blog = Blog.query.filter_by(id=id).first()
+
+    if blogs is None:
+        abort(404)
+
+    form = CommentForm()
+
+    if form.validate_on_submit():
+        comment_section = form.comment_section.data
+        new_comment = Comments(comment_section=comment_section, blog=blog, user=current_user)
+        new_comment.save_comment()
+
+        return redirect(url_for('.blog', id=blog_id))
+
+    title = 'New Comment'
+    return render_template('new_comment.html', title=title, comment_form=form)
+
+# switch to blogger page
+@main.route('/blogger')
+@login_required
+def blogger():
+    '''
+    Blogger function that returns the  blogger's page and all its data
+    '''
+    title = 'Blogger'
+    blog = Blog.get_blog()
+
+    return render_template('blogger.html', title=title, blog=blog)
+
 
 @main.route('/blog/new/', methods = ['GET','POST'])
 @login_required
@@ -49,5 +86,5 @@ def new_blog():
         new_blog.save_blog()
         return redirect(url_for('.index'))
 
-    title = 'New Blog'
+    title = 'Create New Blog'
     return render_template('new_blog.html', title = title, blog_form = form)
