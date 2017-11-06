@@ -17,8 +17,24 @@ def index():
     title = 'Home - Welcome to Brownies Blog'
     return render_template('index.html', title = title, blog = blog)
 
+# #homepage
+# @main.route('/blog/<int:id>')
+# def blogs(id):
+#     '''
+#     Blog route function that returns a list of blogs
+#     '''
+#
+#     blog = Blog.query.get(id)
+#
+#     if blogs is None:
+#         abort(404)
+#
+#     comment_id = Comments.get_comments(id)
+#     title = f'Blog {blog.id}'
+#     return render_template('homepage.html', title = title, blog = blog, comment_id = comment_id)
+#
+
 @main.route('/blog/<int:id>')
-@login_required
 def blogs(id):
     '''
     Blog route function that returns a list of blogs
