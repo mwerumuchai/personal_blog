@@ -5,7 +5,7 @@ class Config:
     General configuration parent class
     '''
 
-    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://muchai:muchai90@localhost/brownblog'
+
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = os.environ.get('SECRET_KEY')
     # simple mde  configurations
@@ -31,7 +31,7 @@ class DevConfig(Config):
         Config: The parent configuration class with General configuration settings
     '''
 
-
+    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://muchai:muchai90@localhost/brownblog'
 
     DEBUG = True
 
