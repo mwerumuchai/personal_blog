@@ -65,7 +65,7 @@ class User(UserMixin,db.Model):
     username = db.Column(db.String(255))
     email = db.Column(db.String(255),unique=True,index=True)
     pass_secure = db.Column(db.String(255))
-    role_id = db.Column(db.Integer,db.ForeignKey("roles.id"))
+    # role_id = db.Column(db.Integer,db.ForeignKey("roles.id"))
     blog = db.relationship("Blog", backref = "user", lazy = "dynamic")
     comment = db.relationship("Comments", backref = "user", lazy = "dynamic")
 
