@@ -6,6 +6,15 @@ from .. import db
 from .forms import BlogForm
 
 ## Admin dashboard
+
+def check_admin():
+    '''
+    Prevent non-admins from accessing the page
+    '''
+    if not current_user.is_admin:
+        abort(403)
+
+
 @admin.route('/admin/dashboard')
 @login_required
 def admin_dashboard():
@@ -15,15 +24,8 @@ def admin_dashboard():
     if not current_user.is_admin:
         abort(403)
 
-    blog = Blog.get_blog()
-    return render_template('admin/admin_dashboard.html', title="AdminDashboard",blog=blog)
-
-def check_admin():
-    '''
-    Prevent non-admins from accessing the page
-    '''
-    if not current_user.is_admin:
-        abort(403)
+    blogs = Blog.get_blog()
+    return render_template('admin/admin_dashboard.html', title="AdminDashboard",blogs=blogs)
 
 # blog views
 @admin.route('/blogs', methods=['GET','POST'])
@@ -34,9 +36,9 @@ def list_blogs():
     '''
     check_admin()
 
-    blog = Blog.query.all()
+    blogs = Blog.query.all()
 
-    return render_template('admin/post.html',blog=blog, title="Blogs")
+    return render_template('admin/post.html',blogs=blogs, title="Blogs")
 
 @admin.route('/blogs/add', methods=['GET', 'POST'])
 @login_required
@@ -53,43 +55,46 @@ def add_blog():
 
     form = BlogForm()
     if form.validate_on_submit():
-        blog = Blog(title=form.title.data,content=form.content.data)
+        blogs = Blog(title=form.title.data,content=form.content.data)
+
         try:
-            db.session.add(blog)
+            db.session.add(blogs)
             db.session.commit()
             flash('Successfully added a new Blog Post.')
         except:
+
             flash('Error: Blog already exists.')
-        return redirect(url_for('.list_blogs'))
-    return render_template('admin/posts.html', action = "Add", add_blog=add_blog,form=form,title="Add Department")
+        return redirect(url_for('admin.list_blogs'))
+
+    return render_template('admin/posts.html', action = "Add", add_blog=add_blog,form=form,title="Add Blog")
 
 # Edit blog
 @admin.route('/blogs/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
-def edit_blog():
+def edit_blog(id):
     '''
     Route function that edits a blog post
     '''
     check_admin()
     add_blog = False
 
-    blog = Blog.query.get_or_404(id)
-    form = BlogForm(obj=blog)
+    blogs = Blog.query.get_or_404(id)
+    form = BlogForm(obj=blogs)
     if form.validate_on_submit():
-        blog.title = form.title.data
-        blog.content = form.content.data
+        blogs.title = form.title.data
+        blogs.scontent = form.content.data
         db.session.commit()
-        flash('Sussessfully edited the Blog Post')
+        flash('Successfully edited the Blog Post')
         return redirect(url_for('admin.list_blogs'))
 
-    form.title.data = blog.title
-    form.content.data = blog.content
-    return render_template('admin/posts.html', action = 'Edit', add_blog=add_blog,form=form,blog=blog, title="Edit Blog")
+    form.title.data = blogs.title
+    form.content.data = blogs.content
+    return render_template('admin/posts.html', action = 'Edit', add_blog=add_blog,form=form,blogs=blogs, title="Edit Blog")
 
 # Delete blog
 @admin.route('/blogs/delete/<int:id>', methods=['GET', 'POST'])
 @login_required
-def delete_blog():
+def delete_blog(id):
     '''
     Route function that deletes a blog post
     '''

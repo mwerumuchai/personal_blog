@@ -2,11 +2,10 @@
 <link rel="stylesheet" href="{{url_for('static',filename='css/index.css')}}"> {% endblock %}
 <!-- block content -->
 {% block content %}
-<h4>Brownie's Blog</h4> {{ blog.title }}
 <div class="container">
-  {{ blog.content }}
-  <h4>Comments:</h4>{% if comments %} {{ macro.displaySpecificBlog(comments)}}
-  <hr> {%else%}
+  <h3>{{ blogs.title }} <br> {{ blogs.content }}</h3>
+  <hr>
+  <h4>Comments:</h4>{% if comments %} {{ macro.displaySpecificBlog(comments)}} {%else%}
   <h3 class="text-center">No comment </h3>{% endif %}
-  <p class="text-right"><a class="btn btn-primary" href="/blog/new/{{blog.id}}">Add a comment</a></p>
+  <p class="text-right"><a class="btn btn-primary" href="/blog/new/{{blogs.id}}">Add a comment</a></p>
 </div>{% endblock %}

@@ -5,10 +5,12 @@
 <div class="container">
   <h2><a href="/blogs/{{blog.id}}">{{blog.title }}</a></h2>
   <h4>{{blog.content}}</h4>
-  <small>By: <i>{{ blog.user.username }}</i></small>
+  <p class="text-right"><small><i>{{ blog.user.username }}</i></small></p>
 
 </div>
-{% endfor %}{% endmacro %} Display comments {% macro displayComments(comment_list)%} {% for comments in comment_list%}
+{% endfor %}{% endmacro %}
+<!-- Display comments  -->
+{% macro displayComments(comment_list)%} {% for comments in comment_list%}
 <div class="container">{{ comments.comment_section }}
   <small>By: <i>{{ comments.user.username }}</i></small>
 

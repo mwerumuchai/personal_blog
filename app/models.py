@@ -23,7 +23,7 @@ class Blog(db.Model):
     # add columns
     id = db.Column(db.Integer, primary_key = True)
     title = db.Column(db.String(255))
-    content = db.Column(db.String(255))
+    content = db.Column(db.String(1000))
     date_posted = db.Column(db.DateTime,default=datetime.utcnow)
     user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
     comment_id = db.relationship("Comments", backref = "blog", lazy = "dynamic")
@@ -101,7 +101,7 @@ class Comments(db.Model):
 
     # add columns
     id = db.Column(db. Integer,primary_key = True)
-    comment_section = db.Column(db.String(255))
+    comment_section = db.Column(db.String(500))
     author = db.Column(db.String(255))
     date_posted = db.Column(db.DateTime,default=datetime.utcnow)
     user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
