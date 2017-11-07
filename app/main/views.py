@@ -6,7 +6,8 @@ from flask_login import login_required, current_user
 from .forms import BlogForm, CommentForm
 import markdown2
 
-# views
+
+# index page
 @main.route('/')
 def index():
     '''
@@ -17,52 +18,32 @@ def index():
     title = 'Home - Welcome to Brownies Blog'
     return render_template('index.html', title = title, blog = blog)
 
-# #homepage
-# @main.route('/blog/<int:id>')
-# def blogs(id):
-#     '''
-#     Blog route function that returns a list of blogs
-#     '''
-#
-#     blog = Blog.query.get(id)
-#
-#     if blogs is None:
-#         abort(404)
-#
-#     comment_id = Comments.get_comments(id)
-#     title = f'Blog {blog.id}'
-#     return render_template('homepage.html', title = title, blog = blog, comment_id = comment_id)
-#
 
-@main.route('/blog/<int:id>')
-def blogs(id):
+# Admin dashboard
+@main.route('/admin_dashboard')
+@login_required
+def admin_dashboard():
     '''
-    Blog route function that returns a list of blogs
+    Prevent users from accessing the admin page
     '''
+    if not current_user.is_admin:
+        abort(403)
 
-    blog = Blog.query.get(id)
-
-    if blogs is None:
-        abort(404)
-
-    comment_id = Comments.get_comments(id)
-    title = f'Blog {blog.id}'
-    return render_template('blog.html', title = title, blog = blog, comment_id = comment_id)
+    return render_template('admin/admin_dashboard.html', title="AdminDashboard")
 
 # single blog
-@main.route('/blog/<int:id>')
+@main.route('/blogs/<int:id>')
 def single_blog(id):
     '''
     Function that handles viewing a single review
     '''
     blog=Blog.query.get(id)
+    comments = Comments.get_comments(id)
 
-    if blogs is None:
-        abort(404)
 
     format_blog = markdown2.markdown(blog.content,extras=["code-friendly", "fenced-code-blocks"])
 
-    return render_template('blogger_post.html', title = title, blog = blog, content = content, format_blog = format_blog)
+    return render_template('blog.html', blog = blog, comments = comments, format_blog = format_blog)
 # comment on blogs
 @main.route('/blog/new/<int:id>', methods = ['GET','POST'])
 @login_required
@@ -72,8 +53,6 @@ def new_comment(id):
     '''
     blog = Blog.query.filter_by(id=id).first()
 
-    if blogs is None:
-        abort(404)
 
     form = CommentForm()
 
@@ -82,7 +61,7 @@ def new_comment(id):
         new_comment = Comments(comment_section=comment_section, blog_id=blog.id, user=current_user)
         new_comment.save_comment()
 
-        return redirect(url_for('.blogs', id = blog.id))
+        return redirect(url_for('.single_blog', id = blog.id))
 
     title = 'New Comment'
     return render_template('new_comment.html', title=title, comment_form=form)
@@ -108,8 +87,6 @@ def new_blog():
     '''
     form = BlogForm()
 
-    if blogs is None:
-        abort(404)
 
     if form.validate_on_submit():
         title = form.title.data

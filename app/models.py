@@ -68,6 +68,7 @@ class User(UserMixin,db.Model):
     # role_id = db.Column(db.Integer,db.ForeignKey("roles.id"))
     blog = db.relationship("Blog", backref = "user", lazy = "dynamic")
     comment = db.relationship("Comments", backref = "user", lazy = "dynamic")
+    is_admin = db.Column(db.Boolean,default=False)
 
 
     # securing our passwords

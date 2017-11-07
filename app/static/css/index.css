@@ -3,9 +3,9 @@ body {
   background: #eee;
 }
 
-/*#navigate {
-  background-color: #3b5998;
-}*/
+#navigate {
+  background-color: #fff;
+}
 
 /*#contentinfo {
   line-height: 20px;
@@ -14,3 +14,20 @@ body {
   text-align: justify;
   width: 140px;
 }*/
+
+.outer {
+  display: table;
+  position: absolute;
+  height: 70%;
+  width: 100%;
+}
+
+.middle {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.inner {
+  margin-left: auto;
+  margin-right: auto;
+}
