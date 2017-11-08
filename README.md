@@ -35,12 +35,12 @@ This is a web application that allows a blogger to create new posts, delete a po
 | Delete a users comment | **Click** Delete comment | Deletes specific comment for a user |
 
 ## Setup/Installation Requirements
-Click on Personal Blog Link
+Click on [Blog](https://team-lightskin.herokuapp.com/)
 
 
 ## Known Bugs
 
-No known bugs
+Subscribe user not integrated
 
 ## Technologies Used
 
